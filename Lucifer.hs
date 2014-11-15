@@ -1,7 +1,17 @@
 
 {-# LANGUAGE QuasiQuotes #-}
 
-module Lucifer where
+module Lucifer    ( Digit(..),
+                    unDigit,
+
+                    zero, one, two, three, four, five, six, seven, eight, nine,
+                    digits, numbers,
+
+                    digitToInt,
+                    intToDigit,
+                    toString,
+
+                    digitIsPossible ) where
 
 import Language.Literals.Binary
 import Data.Word
@@ -9,9 +19,11 @@ import Data.Bits
 import Numeric
 import Data.Maybe
 import qualified Data.Char as DC
+import qualified Data.String as DS
 
 newtype Digit = Digit Word8 deriving (Eq)
 
+segmentsNumber = 7
 --  _       _   _       _   _   _   _   _ 
 -- | |   |  _|  _| |_| |_  |_    | |_| |_|   
 -- |_|   | |_   _|   |  _| |_|   | |_|  _|
@@ -45,11 +57,12 @@ toString :: Digit -> String
 toString = addZerosIfNeeded . toWhateverString 
     where 
          addZerosIfNeeded s
-                | length s < 7 = replicate (7 - length s) '0' ++ s
+                | length s < segmentsNumber = replicate (segmentsNumber - length s) '0' ++ s
                 | otherwise = s
 
 toWhateverString :: Digit -> String
 toWhateverString (Digit w ) = showIntAtBase 2 DC.intToDigit w ""
+
 
 digitIsPossible :: Digit -> Digit -> Digit -> Bool
 digitIsPossible (Digit definitelyWork) (Digit real) (Digit candidate) = Digit segments == allSegments
@@ -64,4 +77,4 @@ instance Show Digit where
         | digit `elem` digits = "<" ++ [DC.intToDigit (fromJust (digitToInt digit))] ++ "> " ++ toString digit
         | otherwise = "<?> " ++ toString digit
 
-
+    
