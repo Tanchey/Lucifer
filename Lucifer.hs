@@ -5,12 +5,16 @@ module Lucifer    ( Digit(..),
                     unDigit,
 
                     zero, one, two, three, four, five, six, seven, eight, nine,
+                    none,
+
                     digits, numbers,
 
                     digitToInt,
                     intToDigit,
                     toString,
                     fromString,
+                    toList,
+                    fromList,
 
                     allCandidates,
                     detailedCandidates,
@@ -44,6 +48,8 @@ six         = Digit [b| 1101111 |]
 seven       = Digit [b| 1010010 |]
 eight       = Digit [b| 1111111 |]
 nine        = Digit [b| 1111011 |]
+
+none        = Digit [b| 0000000 |]
 allSegments = Digit [b| 11111111 |]
 
 unDigit (Digit w) = w
@@ -105,7 +111,7 @@ possibleBit s w b | s > 1 || w > 1 || b > 1 = False
 
 -- Shows whether observer could see this digit
 digitIsPossible :: Digit -> Digit -> Digit -> Bool
-digitIsPossible see works broken = all id $ map checkBit triples
+digitIsPossible see works broken = all checkBit triples
     where triples = zip3 (toList see) (toList works) (toList broken)
           checkBit (s, w, b) = possibleBit s w b
 

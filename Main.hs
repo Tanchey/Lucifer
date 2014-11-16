@@ -3,7 +3,7 @@ import Control.Monad
 import Data.Maybe
  
 main :: IO ()
-main = loop (Just ((Luc.Digit 0), (Luc.Digit 0)))
+main = loop (Just (Luc.none, Luc.none))
 
 loop :: Maybe (Luc.Digit, Luc.Digit) -> IO()
 loop Nothing = putStrLn "Whoooops"
