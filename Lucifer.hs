@@ -75,7 +75,7 @@ toWhateverString :: Digit -> String
 toWhateverString (Digit w ) = showIntAtBase 2 DC.intToDigit w ""
 
 fromString :: String -> Maybe Digit
-fromString s = w (sequence (map fromChar s))
+fromString s = w (sequence mapM fromChar s)
     where w Nothing = Nothing
           w (Just bits) = Just $ fromList bits
 
