@@ -7,7 +7,6 @@ synopsis:            A small system for handling signals of broken traffic light
 -- description:         
 homepage:            https://github.com/Tanchey/Lucifer
 license:             PublicDomain
-license-file:        LICENSE
 author:              Tatiana Lomonosova
 maintainer:          tan4ey@gmail.com
 -- copyright:           
