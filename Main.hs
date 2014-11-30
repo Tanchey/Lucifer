@@ -1,24 +1,37 @@
-import qualified Lucifer as Luc
-import Control.Monad
-import Data.Maybe
- 
-main :: IO ()
-main = loop (Just (Luc.none, Luc.none))
+{-# LANGUAGE OverloadedStrings #-}
 
-loop :: Maybe (Luc.Digit, Luc.Digit) -> IO()
-loop Nothing = putStrLn "Whoooops"
-loop (Just (work, broken)) = do
-        foo <- putStrLn "Okay, google. What does traffic light say?"  
-        digitString <- getLine  
-        let (candidates, settings) = settingsTuple digitString work broken
-        putStrLn ("Aha! " ++ show candidates ++ "\n" ++ show settings)
-        loop settings
+import Web.Scotty
+import Data.Monoid (mconcat)
+import Control.Monad (when)
+import Data.Char (toUpper)
+import Text.Read (readMaybe)
+import System.Console.Docopt (optionsWithUsageFile, getArg, isPresent, command,
+    argument, longOption)
 
-settingsTuple :: String -> Luc.Digit -> Luc.Digit -> (Maybe [Luc.Digit], Maybe (Luc.Digit, Luc.Digit))
-settingsTuple digitString w b | isNothing maybeDigit = (Nothing, Nothing)
-                              | isNothing details = (Nothing, Nothing)
-                              | otherwise = reformat $ fromJust details
-                                    where maybeDigit = Luc.fromString digitString
-                                          details = Luc.realWorldDetailedCandidates (fromJust maybeDigit) w b
-                                          reformat (a, b, c) = (Just a, Just (b, c))
+main = do
+  args <- optionsWithUsageFile "USAGE.txt"
+  let portAndMessage = if args `isPresent` longOption "port"
+                          then parsePortArg (args `getArg` longOption "port")
+                          else (3000, "Starting server on 3000 port.")
+  startScotty portAndMessage
+
+parsePortArg :: Maybe String -> (Int, String)
+parsePortArg maybePortString = 
+  let parsePort :: Maybe Int -> (Int, String)
+      parsePort Nothing = (3000, "Port was specified incorrectly. Lucifer will use default server.\nStarting server on 3000 port.")
+      parsePort (Just port) = (port, "Starting server on " ++ show port ++ " port.")
+  in case maybePortString of
+    Nothing -> parsePort Nothing
+    (Just portString) -> parsePort $ readMaybe portString
+
+
+startScotty (port, message) = do 
+    putStrLn message
+    scotty port $ do
+        get "/:word" $ do
+            beam <- param "word"
+            html $ mconcat ["<h1>Scotty, ", beam, " me up!</h1>"]
+        notFound (html "¯\\_(ツ)_/¯")
+
+
 

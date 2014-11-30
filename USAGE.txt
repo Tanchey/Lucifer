@@ -1,0 +1,8 @@
+Usage:
+  Lucifer [--port=PORT] [--verbose | --quiet] [-h]
+
+Options:
+  --port=PORT   Port number [default: 3000]
+  --help -h     Print help info
+  --quiet -q    Print less 
+  --verbose -v  Print more

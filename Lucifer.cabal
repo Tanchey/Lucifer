@@ -19,6 +19,7 @@ executable Lucifer
   main-is:             Main.hs
   -- other-modules:       
   other-extensions:    QuasiQuotes, TemplateHaskell, FlexibleInstances
-  build-depends:       base >=4.6 && <4.7, binary-literal-qq >=1.0 && <1.1, tasty >=0.10 && <0.11, tasty-quickcheck >=0.8 && <0.9, tasty-th >=0.1 && <0.2, tasty-hunit >=0.9 && <0.10
+  build-depends:       base, binary-literal-qq, tasty, tasty-quickcheck, tasty-th, tasty-hunit, scotty, docopt
   -- hs-source-dirs:      
   default-language:    Haskell2010
+  ghc-options: -Wall -O2 -threaded
